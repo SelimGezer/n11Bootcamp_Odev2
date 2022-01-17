@@ -4,7 +4,7 @@ import com.selim.springboot.converter.CommentMapper;
 import com.selim.springboot.core.Result;
 import com.selim.springboot.core.ResultWithData;
 import com.selim.springboot.dao.ProductCommentDao;
-import com.selim.springboot.dao.UrunDao;
+import com.selim.springboot.dao.ProductDao;
 import com.selim.springboot.dao.UserDao;
 import com.selim.springboot.dto.CommentDto;
 import com.selim.springboot.dto.CommentInsertDto;
@@ -23,13 +23,13 @@ public class ProductCommentEntityService {
 
     private ProductCommentDao productCommentDao;
     private UserDao userDao;
-    private UrunDao urunDao;
+    private ProductDao productDao;
 
     @Autowired
-    public ProductCommentEntityService(ProductCommentDao productCommentDao, UserDao userDao, UrunDao urunDao) {
+    public ProductCommentEntityService(ProductCommentDao productCommentDao, UserDao userDao, ProductDao productDao) {
         this.productCommentDao = productCommentDao;
         this.userDao = userDao;
-        this.urunDao = urunDao;
+        this.productDao = productDao;
     }
 
     public Result getByUser_Id(long id){
@@ -46,7 +46,7 @@ public class ProductCommentEntityService {
     }
 
     public Result getByUrun_Id(long id){
-        Optional<Urun> optionalUrun =  urunDao.findById(id); //TODO:Ürünün sitemde olup olmadığı kontrol ediliyor. VAR İSE devam edilip ürüne yapılan yorumlar taranıyor.
+        Optional<Urun> optionalUrun =  productDao.findById(id); //TODO:Ürünün sitemde olup olmadığı kontrol ediliyor. VAR İSE devam edilip ürüne yapılan yorumlar taranıyor.
 
         if(optionalUrun.isPresent()){
             if(this.productCommentDao.getByUrun_Id(id).size()>0)
@@ -74,7 +74,7 @@ public class ProductCommentEntityService {
     public Result insertComment(CommentInsertDto commentInsertDto){//Todo: Hem kullanıcı hem de urun kontrol ediliyor. Sonrasında ekleme işlemi gerçekleştiriliyor.
         ProductComment productComment = CommentMapper.toEntity(commentInsertDto);//Todo: Dto to Entity
         Optional<User> optionalUser=userDao.findById(commentInsertDto.getUser_id());
-        Optional<Urun> optionalUrun=urunDao.findById(commentInsertDto.getUrun_id());
+        Optional<Urun> optionalUrun= productDao.findById(commentInsertDto.getUrun_id());
 
         if(!optionalUser.isPresent()){
             return new Result(String.format("%d id'e sahip bir kullanıcı bulunmuyor. Yorum eklenemez!",commentInsertDto.getUser_id()));

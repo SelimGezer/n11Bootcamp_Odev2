@@ -17,24 +17,24 @@ public class UsersController {
     @Autowired
     private UserEntityService userEntityService;
 
-    @GetMapping("/findAll")
+    @GetMapping("")
     public List<User> findAll(){
         return userEntityService.findAll();
     }
 
-    @GetMapping(value = "/getByUsername")
-    public User getByKullaniciAdi(
-            @RequestParam(value ="kullaniciAdi") String kullaniciAdi){
-        return userEntityService.getByKullaniciAdi(kullaniciAdi);
+    @GetMapping(value = "/names")
+    public User getByUsername(
+            @RequestParam(value ="username") String username){
+        return userEntityService.getByKullaniciAdi(username);
     }
 
-    @GetMapping(value = "/getByPhone",params = {"tel"})
-    public User getByTelefon(@RequestParam(value = "tel") String kullaniciTel){
-        return userEntityService.getByTelefon(kullaniciTel);
+    @GetMapping(value = "/phones",params = {"phoneNumber"})
+    public User getByPhonenumber(@RequestParam(value = "phoneNumber") String phoneNumber){
+        return userEntityService.getByTelefon(phoneNumber);
     }
 
-    @PostMapping("/insertUser")
-    public void insertUser(@RequestBody UserDto userDto){
+    @PostMapping("")
+    public void addUser(@RequestBody UserDto userDto){
         userEntityService.insertUser(userDto);
     }
 
@@ -58,8 +58,8 @@ public class UsersController {
         }
     }
 
-   @PutMapping(value = "/updateUser",params = {"id"})
-    public ResponseEntity updateKullanici(@RequestParam(value="id") Long id,@RequestBody UserDto userDto){
+   @PutMapping(value = "",params = {"id"})
+    public ResponseEntity updateUser(@RequestParam(value="id") Long id,@RequestBody UserDto userDto){
        return userEntityService.updateKullaniciByID(id, userDto);
     }
 
